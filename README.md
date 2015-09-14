@@ -6,7 +6,7 @@ Dockerfile to build openssl 1.0.2d on android api 19
 How to use it
 -------------------
 
-```
+```shell
   git clone https://github.com/kkdai/docker-android-openssl.git
   
   #build docker image

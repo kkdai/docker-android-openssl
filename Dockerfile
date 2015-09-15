@@ -1,16 +1,9 @@
 # THIS DOCKERFILE TRIES TO COMPILE OPENSSL FOR ANDROID
-#
-# 5 july 2015
-#
-# More detals could be found here: 
-# http://vitiy.info/dockerfile-example-to-compile-libcurl-for-android-inside-docker-container/
- 
 FROM ubuntu
 
 MAINTAINER Evan Lin "evanslin@gmail.com"
 
 # Install compilation tools
-
 RUN echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 RUN apt-get update && apt-get install -y \
@@ -90,23 +83,19 @@ RUN curl -O https://www.openssl.org/source/openssl-1.0.2d.tar.gz && \
 
 # Build armv7
 RUN ls && cd openssl-1.0.2d && ./Configure android-armv7 no-asm no-shared --static --with-zlib-include=/Android/zlib/include --with-zlib-lib=/Android/zlib/lib && \
-	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output && cp libssl.a /Android/output 
+	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output/libcrypto_armv7.a && cp libssl.a /Android/output/libssl_armv7.a && make clean
 RUN cp -r openssl-1.0.2d /Android/output/openssl-armv7
-#RUN make clean
 
 # Build android-x86
 RUN ls && cd openssl-1.0.2d && ./Configure android-x86 no-asm no-shared --static --with-zlib-include=/Android/zlib/include --with-zlib-lib=/Android/zlib/lib && \
-	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output && cp libssl.a /Android/output 
+	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output/libcrypto_x86.a && cp libssl.a /Android/output/libssl_x86.a && make clean
 RUN cp -r openssl-1.0.2d /Android/output/openssl-x86
-#RUN make clean
 
 # Build android-mips
 RUN ls && cd openssl-1.0.2d && ./Configure android-mips no-asm no-shared --static --with-zlib-include=/Android/zlib/include --with-zlib-lib=/Android/zlib/lib && \
-	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output && cp libssl.a /Android/output 
+	make build_crypto build_ssl -j 4 && ls && cp libcrypto.a /Android/output/libcrypto_mips.a && cp libssl.a /Android/output/libssl_mips.a && make clean
 RUN cp -r openssl-1.0.2d /Android/output/openssl-mips
-#RUN make clean
 
 # To get the results run container with output folder
 # Example: docker run -v HOSTFOLDER:/output --rm=true IMAGENAME 
-
 ENTRYPOINT cp -r /Android/output/* /output

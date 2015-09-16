@@ -1,6 +1,11 @@
 # docker-android-openssl
 
-Dockerfile to build openssl 1.0.2d on android api 19
+Dockerfile to build openssl 1.0.2d on android api 19, currentlu it supprot follow version:
+
+- armv7
+- x86
+- mips
+
 
 
 How to use it
